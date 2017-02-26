@@ -18,6 +18,7 @@ public class DummyLocalizer implements EstimatorInterface {
 		 {0.025, 0.05,  0.05,  0.05,  0.025},
 		 {0.025, 0.025, 0.025, 0.025, 0.025}};
 	private HiddenMarkovModel hmm;
+	private List<Integer> evidences;
 
 	public DummyLocalizer( int rows, int cols, int head) {
 		this.rows = rows;
@@ -25,24 +26,9 @@ public class DummyLocalizer implements EstimatorInterface {
 		this.head = head;
 		
 		hmm = new HiddenMarkovModel(rows, cols);
-		
-		double[][] O = new double[rows*cols*4][rows*cols*4];
-		int x = 2; y = 1;
-		int startX = Math.max(x-2, 0);
-		int endX = Math.min(x+2, O.length);
-		int startY = Math.max(y-2, 0);
-		int endY = Math.min(y+2, O.length);
-		int index;
-		for(int i = startX; i < endX; i++){
-			for(int j = startY; j < endY; j++){
-				for(int kk = 0; kk < 4; kk++){
-					index = rows * i + kk + cols * (j + rows);
-					O[index][index] = 0.05 / Math.max(Math.abs(x-i), Math.abs(y-i));
-				}
-			}
-		}
-		
-		// minus sitt egna state... använd 16 i en loop och kolla om utanför ? 
+		evidences = new LinkedList<Integer>();
+
+		                                                                                                                 
 	}	
 	
 	public int getNumRows() {
@@ -116,4 +102,17 @@ public class DummyLocalizer implements EstimatorInterface {
 		System.out.println("updated: (x,y)=(" + x + "," + y + "), (sX,sY)=(" + sX + "," + sY + ")");
 	}
 	
+	private double[][] generateO(int e){
+		int eX = e / (cols*4);
+		int eY = e / (rows*4);
+		int dx, dy;
+		
+		double[][] O = new double[rows*cols*4][rows*cols*4];
+		for(int i = 0; i < O.length; i++){
+			dx = eX - i / (cols*4);
+			dy = eY - i / (rows*4);
+			O[i][i] = Math.max(dx, dy) <= 2 ? 0.1/Math.pow(2, Math.max(dx,dy)) : 0;
+		}
+		return O;
+	}
 }
