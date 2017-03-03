@@ -1,6 +1,7 @@
 package control;
 
-import model.DummyLocalizer;
+import model.Localizer;
+import model.Matrix;
 import view.RobotLocalizationViewer;
 
 public class Main {
@@ -9,13 +10,13 @@ public class Main {
 	 * ...
 	 */
 	
-	public static void main( String[] args) {
+	public static void main( String[] args) {		
 		
 		/*
 		 * generate you own localiser / estimator wrapper here to plug it into the 
 		 * graphics class.
 		 */
-		EstimatorInterface l = new DummyLocalizer( 5, 4, 4);
+		EstimatorInterface l = new Localizer( 6, 6, 4);
 
 		RobotLocalizationViewer viewer = new RobotLocalizationViewer( l);
 
