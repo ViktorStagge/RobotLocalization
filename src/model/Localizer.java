@@ -71,6 +71,8 @@ public class Localizer implements EstimatorInterface {
 			return p;
 		} else {
 			Matrix Ot = generateO(rX, rY);
+			System.out.println(Ot.toSparseString());
+			System.out.println();
 			return Ot.get(y*rows*4+x*4, y*rows*4+x*4)*4;
 		}
 	}
@@ -138,20 +140,45 @@ public class Localizer implements EstimatorInterface {
 	}
 	
 	private Matrix generateO(int eX, int eY){
-		int dx, dy, i;
-		if(eX == 0 && eY == 0) return generateOatZero();
 		
 		double[][] O = new double[rows*cols*4][rows*cols*4];
+		
+		if(eX == 0 && eY == 0) {
+			for(int i = 0; i < O.length; i++){
+				int x = (i%(rows*4)/4);
+				int y = i/(rows*4);
+				
+				
+				// GENERERAR DESSA SANNOLIKHETER FEL (FÖR STORA)
+				for(int dx = -2; dx <= 2; dx++){
+					for(int dy = -2; dy <= 2; dy++){
+						int maxDx = 0, maxDy = 0;
+						if(rows-dx-x-1 == -2 || dx+x == -2) maxDx = 2;
+						if(cols-y-dy-1 == -2 || dy+y == -2) maxDy = 2;
+						if(rows-dx-x-1 == -1 || dx+x == -1) maxDx = 1;
+						if(cols-y-dy-1 == -1 || dy+y == -1) maxDy = 1;
+						if(Math.max(maxDx, maxDy) > 0) {
+							System.out.println(String.format("generate O_0: maxDx=%d, maxDy=%d", maxDx, maxDy));
+							O[i][i] += 0.05/(Math.min(maxDx, maxDy) == 0 ? Math.max(maxDx, maxDy) : Math.min(maxDx, maxDy));
+						}
+					}
+				}
+				O[i][i] = (O[i][i] + 0.1)/4;
+			}
+		}
+		
 		for(int y = 0; y < cols; y++){
+			int dx, dy, i;
 			for(int x = 0; x < rows; x++){
 				i = y*rows*4+x*4; 
 				dx = Math.abs(eX - x);
 				dy = Math.abs(eY - y);
-				O[i][i] = Math.max(dx, dy) <= 2 ? 0.1/Math.pow(2, 2+Math.max(dx,dy)) : 0;
+				O[i][i] += Math.max(dx, dy) <= 2 ? 0.1/Math.pow(2, 2+Math.max(dx,dy)) : 0;
 				O[i+1][i+1] = O[i][i]; O[i+2][i+2] = O[i][i]; O[i+3][i+3] = O[i][i];
 			}
 		}
 		
+		System.out.println("FUCKFUCKFUCK\n" + new Matrix(O).toSparseString());
 		return new Matrix(O);
 	}
 	
@@ -170,11 +197,15 @@ public class Localizer implements EstimatorInterface {
 					if(cols-y-dy-1 == -2 || dy+y == -2) maxDy = 2;
 					if(rows-dx-x-1 == -1 || dx+x == -1) maxDx = 1;
 					if(cols-y-dy-1 == -1 || dy+y == -1) maxDy = 1;
-					if(Math.min(maxDx, maxDy) > 0) O[i][i] += 0.05/Math.min(maxDx, maxDy);
+					if(Math.max(maxDx, maxDy) > 0) {
+						System.out.println(String.format("generate O_0: maxDx=%d, maxDy=%d", maxDx, maxDy));
+						O[i][i] += 0.05/(Math.min(maxDx, maxDy) == 0 ? Math.max(maxDx, maxDy) : Math.min(maxDx, maxDy));
+					}
 				}
 			}
 			O[i][i] = (O[i][i] + 0.1)/4;
 		}
+		System.out.println(new Matrix(O).toSparseString());
 		return new Matrix(O);
 	}
 	

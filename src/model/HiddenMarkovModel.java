@@ -31,6 +31,7 @@ public class HiddenMarkovModel {
 		
 		T = new Matrix(TArray);
 		TTranspose = Matrix.transpose(T);
+		System.out.println(T.toSparseString());
 	}
 	
 	public double get(int x, int y){

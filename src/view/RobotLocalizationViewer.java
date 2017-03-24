@@ -268,7 +268,8 @@ public class RobotLocalizationViewer {
 				
 				states[x][y][0].setBackground(Color.white);
 				
-				s += String.format("%.4f", loc.getOrXY( sXCount, sYCount, x, y));
+				System.out.println(String.format("locXorY: x=%d, y=%d, sX=%d, sY=%d", x, y, sXCount, sYCount));
+				s += String.format("%.4f", loc.getOrXY( x, y, sXCount, sYCount));
 					
 				states[x][y][0].setText( s );
 			}
