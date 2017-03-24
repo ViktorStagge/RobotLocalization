@@ -79,7 +79,7 @@ public class Matrix {
 	
 	public static Matrix dotMultiply(Matrix m, Matrix o){
 		if(m.rows != o.rows || m.cols != o.cols || m.cols != 1){
-			System.out.println(String.format("dotMultiply: (%d,%d)x(%d,%d)", m.rows, m.cols, o.rows, o.cols));
+			//System.out.println(String.format("dotMultiply: (%d,%d)x(%d,%d)", m.rows, m.cols, o.rows, o.cols));
 			throw new InputMismatchException();
 		}
 		

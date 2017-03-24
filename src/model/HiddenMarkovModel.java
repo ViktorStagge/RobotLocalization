@@ -28,10 +28,8 @@ public class HiddenMarkovModel {
 			}
 			if(index[i%4] >= 0) TArray[i][index[i%4]] = forwardChance;
 		}
-		
 		T = new Matrix(TArray);
 		TTranspose = Matrix.transpose(T);
-		System.out.println(T.toSparseString());
 	}
 	
 	public double get(int x, int y){

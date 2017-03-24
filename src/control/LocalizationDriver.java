@@ -14,8 +14,6 @@ public class LocalizationDriver extends Thread {
 	
 	public void run() {
 		while( !isInterrupted()) {
-			
-			
 			try{
 				l.updateContinuously();
 				sleep( timer);

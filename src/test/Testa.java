@@ -42,7 +42,13 @@ public class Testa {
 		
 			// de fuck?
 		for(int i = 0; i < ev.size(); i++){
-			fw.add(forward(ev.get(i), fw.get(i), Tt));
+			Matrix O;
+			if(ev.get(i) == 1){
+				O = new Matrix(new double[][]{{0.1, 0.0},{0.0,0.8}});
+			} else {
+				O = new Matrix(new double[][]{{0.9, 0.0},{0.0,0.2}});
+			}
+			fw.add(forward(fw.get(i), O, Tt));
 			System.out.println(String.format("forward: sum=%.3f, f_%d=%s", Matrix.columnSum(fw.get(i+1), 0), (i+1), Matrix.transpose(fw.get(i+1))));
 		}
 		double alpha;
@@ -61,7 +67,18 @@ public class Testa {
 		return sv;
 	}
 	
-	private Matrix forward(int ev, Matrix prior, Matrix Tt){
+	private Matrix forward(Matrix prior, Matrix O, Matrix Tt){
+		double alpha = 1.0;
+		Matrix OTt = Matrix.multiply(O,  Tt);
+		Matrix OTtf = Matrix.multiply(OTt, prior);
+
+		alpha = Matrix.columnSum(OTtf, 0);
+		Matrix alphaOTtf = Matrix.multiply(OTtf, 1/alpha);
+		
+		return alphaOTtf;
+	}
+	
+	/*private Matrix forward(int ev, Matrix prior, Matrix Tt){
 		double alpha = 1.0;
 		Matrix O;
 		if(ev == 1){
@@ -75,7 +92,7 @@ public class Testa {
 		alpha = Matrix.columnSum(OTtf, 0);
 		Matrix alphaOTtf = Matrix.multiply(OTtf, 1/alpha);
 		return alphaOTtf;
-	}
+	} */
 	
 	private Matrix backward(int ev, Matrix prior, Matrix T){
 		Matrix O;

@@ -161,7 +161,6 @@ public class RobotLocalizationViewer {
 			else
 				updateViewer(  tXY[0], tXY[1], -1, -1);	
 					
-			
 		}
 	}
 	
@@ -184,7 +183,7 @@ public class RobotLocalizationViewer {
 
 				posProb = 0.0;
 				posProb = loc.getCurrentProb( x, y);
-				states[x][y][0].setText( String.format("%d: %.3f", y*4*rows + x*4, posProb, loc.getOrXY( sXCount, sYCount, x, y)));				
+				states[x][y][0].setText( String.format("%.4f", posProb));				
 				if( posProb == 0.0) {
 					for( h=0; h<5; h++) {
 						states[x][y][h].setBackground(Color.white);
@@ -222,6 +221,7 @@ public class RobotLocalizationViewer {
 		if( sX != -1)
 			states[sX][sY][4].setBackground(Color.cyan);
 		
+				
 	}
 
 	public void updateTransitionView() {
@@ -232,7 +232,8 @@ public class RobotLocalizationViewer {
 			for( y=0; y<cols; y++) {
 				for( h=0; h<head; h++) {
 					states[x][y][h].setText( String.format("%.2f", loc.getTProb( tXCount, tYCount, tHCount, x, y, h)));
-					states[x][y][h].setBackground(Color.white);						
+					states[x][y][h].setBackground(Color.white);
+						
 				}
 				states[x][y][4].setBackground(Color.white);
 				states[x][y][4].setText( "");
@@ -268,10 +269,9 @@ public class RobotLocalizationViewer {
 				
 				states[x][y][0].setBackground(Color.white);
 				
-				System.out.println(String.format("locXorY: x=%d, y=%d, sX=%d, sY=%d", x, y, sXCount, sYCount));
-				s += String.format("%.4f", loc.getOrXY( x, y, sXCount, sYCount));
+				s += String.format("%.4f", loc.getOrXY( sXCount, sYCount, x, y));
 					
-				states[x][y][0].setText( s );
+				states[x][y][0].setText( s);
 			}
 		}	
 		if( sXCount >=0 && sYCount>=0)
