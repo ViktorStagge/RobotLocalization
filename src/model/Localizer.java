@@ -55,6 +55,9 @@ public class Localizer implements EstimatorInterface {
 	}
 
 	public double getOrXY( int rX, int rY, int x, int y) {
+		if(rX < 0 || rY < 0){
+			rX = 0; rY =0;
+		}
 		Matrix Ot = generateO(rX,rY);
 		return( Ot.get((y*rows+x)*4, (y*rows+x)*4) * 4);
 	}
